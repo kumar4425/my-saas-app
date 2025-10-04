@@ -3,16 +3,33 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
+import os
+from urllib.parse import urlparse
 
 app = Flask(__name__)
 
 # Secret key for sessions (required for Flask-Login)
-app.config['SECRET_KEY'] = 'your-secret-key-change-this-in-production'
-# Database configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Harsha%40%401@localhost/my_saas_db'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your-secret-key-change-this-in-production')
+# DEBUG: Print environment variables (remove after fixing!)
+print("🔍 DATABASE_URL from env:", os.environ.get('DATABASE_URL'))
+print("🔍 All env keys:", list(os.environ.keys()))
+
+database_url = os.environ.get('DATABASE_URL')
+if database_url and database_url.startswith('postgres'):
+    # Handle Render's PostgreSQL URL
+    if database_url.startswith("postgres://"):
+        database_url = database_url.replace("postgres://", "postgresql://", 1)
+    app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+    print("✅ Using PostgreSQL:", database_url)
+else:
+    # ONLY use MySQL in development (when RENDER env is not set)
+    if os.environ.get('RENDER'):
+        raise RuntimeError("❌ DATABASE_URL not set in production!")
+    else:
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Harsha%40%401@localhost/my_saas_db'
+        print("✅ Using local MySQL (development)")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['ENV'] = 'development'
-
 db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
