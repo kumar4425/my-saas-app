@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Register - My SaaS App{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="text-center mb-0">Create Your Account</h3>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="subscription_tier" class="form-label">Choose Your Plan</label>
+                        <select class="form-select" id="subscription_tier" name="subscription_tier" required>
+                            <option value="">Select Plan</option>
+                            <option value="free">Free Plan - Basic features</option>
+                            <option value="pro">Pro Plan - $10/month - Advanced features</option>
+                            <option value="enterprise">Enterprise Plan - $50/month - Team collaboration</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Create Account</button>
+                </form>
+                <div class="text-center mt-3">
+                    <p class="mb-0">Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

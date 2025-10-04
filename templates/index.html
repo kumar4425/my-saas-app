@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Home - My SaaS App{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="container text-center">
+        <h1 class="display-4">Welcome to MySaaS</h1>
+        <p class="lead">The simplest way to manage your tasks and boost productivity</p>
+        <div class="mt-4">
+            {% if not current_user.is_authenticated %}
+                <a href="{{ url_for('register') }}" class="btn btn-light btn-lg me-2">Get Started Free</a>
+                <a href="{{ url_for('login') }}" class="btn btn-outline-light btn-lg">Login</a>
+            {% else %}
+                <a href="{{ url_for('dashboard') }}" class="btn btn-light btn-lg">Go to Dashboard</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="row text-center mb-5">
+    <div class="col-md-4">
+        <div class="p-4">
+            <h3>📝 Simple & Clean</h3>
+            <p>Intuitive interface that gets out of your way</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="p-4">
+            <h3>🔒 Secure</h3>
+            <p>Your data is protected with industry-standard security</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="p-4">
+            <h3>🚀 Scalable</h3>
+            <p>Grow from free to enterprise as your needs evolve</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ user.name }}'s Todos</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .todo-item { 
+            display: flex; 
+            align-items: center; 
+            padding: 10px; 
+            border-bottom: 1px solid #eee;
+        }
+        .todo-text { flex: 1; margin-left: 10px; }
+        .completed { text-decoration: line-through; color: #888; }
+        .todo-actions a { margin-left: 10px; color: #dc3545; }
+        form { display: inline; }
+    </style>
+</head>
+<body>
+    <h1>{{ user.name }}'s Todo List</h1>
+    
+    <!-- Add new todo form -->
+    <form method="POST" action="{{ url_for('add_todo', user_id=user.id) }}">
+        <input type="text" name="title" placeholder="Add a new todo..." required 
+               style="padding: 8px; width: 300px;">
+        <button type="submit" style="padding: 8px 15px;">Add</button>
+    </form>
+    
+    <hr>
+    
+    <!-- Todo list -->
+    {% for todo in todos %}
+    <div class="todo-item">
+        <input type="checkbox" {% if todo.completed %}checked{% endif %} 
+               onclick="location.href='{{ url_for('complete_todo', todo_id=todo.id) }}'">
+        <span class="todo-text {% if todo.completed %}completed{% endif %}">
+            {{ todo.title }}
+        </span>
+        <span class="todo-actions">
+            <a href="{{ url_for('delete_todo', todo_id=todo.id) }}" 
+               onclick="return confirm('Delete this todo?')">Delete</a>
+        </span>
+    </div>
+    {% endfor %}
+    
+    <br><br>
+    <a href="{{ url_for('index') }}">← Back to All Users</a>
+</body>
+</html>
