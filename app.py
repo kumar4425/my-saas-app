@@ -151,11 +151,15 @@ def delete_todo(todo_id):
         db.session.delete(todo)
         db.session.commit()
     return redirect(url_for('dashboard'))
-
 if __name__ == '__main__':
     # Only create tables in development
     if app.config['ENV'] == 'development':
         with app.app_context():
             db.create_all()
             print("✅ Database tables created/verified!")
-    app.run(debug=True)
+    
+    # Get port from environment variable (Render sets this automatically)
+    port = int(os.environ.get('PORT', 5000))
+    
+    # Bind to 0.0.0.0 for Render compatibility
+    app.run(host='0.0.0.0', port=port, debug=False)
